@@ -1,0 +1,98 @@
+--- lib/App/Mobirc/Plugin/MessageBodyFilter/Clickable.pm.bak
++++ lib/App/Mobirc/Plugin/MessageBodyFilter/Clickable.pm
+@@ -40,7 +40,7 @@
+ has pocket_hatena => (
+     is  => 'ro',
+     isa => 'Bool',
+-    default => 1,
++    default => 0,
+ );
+ 
+ has google_gwt => (
+@@ -118,15 +118,15 @@
+         $out =
+         sprintf(
+             '<a href="%s%s" rel="nofollow" class="url" target="%s">%s</a>',
+-            encode_entities($self->redirector, q(<>&")),
+-            $encoded_uri,
++            $self->redirector,
++            $orig_uri,
+             $self->http_link_target,
+             $link_string );
+     } else {
+         $out =
+         sprintf(
+             '<a href="%s" rel="nofollow" class="url" target="%s">%s</a>',
+-            $encoded_uri,
++            $orig_uri,
+             $self->http_link_target,
+             $link_string );
+     }
+@@ -135,9 +135,9 @@
+         $out =
+         sprintf(
+             '<a href="%s" rel="nofollow" class="url" target="%s"><img src="http://mgw.hatena.ne.jp/?url=%s&amp;size=%s" alt="%s"/></a>',
+-            $encoded_uri,
++            $orig_uri,
+             $self->http_link_target,
+-            $encoded_uri,
++            $orig_uri,
+             $self->http_extract_image,
+             $link_string );
+     } elsif
+@@ -146,9 +146,9 @@
+         $out =
+         sprintf(
+             '<a href="%s" rel="nofollow" class="url" target="%s"><img src="http://mgw.hatena.ne.jp/?url=%s&amp;size=%s" alt="%s"/></a>',
+-            $encoded_uri,
++            $orig_uri,
+             $self->http_link_target,
+-            $encoded_uri . '.png',
++            $orig_uri . '.png',
+             $self->http_extract_image,
+             $link_string );
+     } elsif
+@@ -157,7 +157,7 @@
+         $out = 
+         sprintf(
+             '<a href="%s"><img src="http://maps.google.com/staticmap?markers=%s&amp;key=%s&amp;zoom=13&amp;maptype=mobile&amp;size=140x140&amp;sensor=false"/></a>',
+-            $encoded_uri,
++            $orig_uri,
+             "$lat,$lon",
+             $self->http_google_maps_api_key,
+         )
+@@ -167,7 +167,7 @@
+         $out .=
+         sprintf(
+             '<a href="device:pcsiteviewer?url=%s" rel="nofollow" class="au_pcsv" target="%s">[PCSV]</a>',
+-            $encoded_uri,
++            $orig_uri,
+             $self->http_link_target );
+     }
+ 
+@@ -175,14 +175,14 @@
+         $out .=
+         sprintf(
+             '<a href="http://mgw.hatena.ne.jp/?url=%s;noimage=0;split=1" rel="nofollow" class="pocket_hatena" target="%s">[ph]</a>',
+-            uri_escape($uri),
++            $orig_uri,
+             $self->http_link_target );
+     }
+     if ( $self->google_gwt ) {
+         $out .=
+         sprintf(
+             '<a href="http://www.google.co.jp/gwt/n?u=%s;_gwt_noimg=0" rel="nofollow" class="google_gwt" target="%s">[gwt]</a>',
+-            uri_escape($uri),
++            $orig_uri,
+             $self->http_link_target );
+     }
+     return U $out;
+@@ -197,7 +197,7 @@
+     }
+     return sprintf(
+         qq{<a href="%s" rel="nofollow" class="url" target="%s">%s</a>},
+-        encode_entities($uri, q(<>&"')),
++        $orig_uri,
+         $self->http_link_target,
+         encode_entities($link_string, q(<>&"')),
+     );

@@ -1,0 +1,44 @@
+{
+    # global settings
+    "global": {
+        "password": "mobirc",
+        "log_max": 180
+    },
+    # load plugins
+    "plugin": [
+        {
+            "module": "Component::IRCClient",
+            "config": {
+                "host":"localhost",
+                "port":"6667",
+                "nick":"znc",
+                "desc":"znc",
+                "username":"znc",
+                "password":"znc",
+                "incode":"jis",
+                "id":"friend",
+                "ssl": 0
+            },
+        },
+        #
+        # http server settings
+        {
+            "module": "Component::HTTPD",
+            "config": {
+                "port": "16667",
+                "host": "localhost",
+#                "root": "/mobirc/"
+            },
+        },
+        # make links clickable
+        {
+            "module":"MessageBodyFilter::Clickable",
+            "config": { }
+        },
+        # test CompressHTML
+        {
+            "module":"HTMLFilter::CompressHTML",
+            "config": { }
+        }
+    ]
+}

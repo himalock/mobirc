@@ -1,0 +1,49 @@
+--- mobirc/assets/static/iphone.js
++++ mobirc/assets/static/iphone.js
+@@ -20,6 +20,7 @@
+ }
+ 
+ function send_message() {
++    if ( ($('#msg').get())[0].value == '' ) { return false };
+     $.post(load_url, {"msg":($('#msg').get())[0].value}, function (html) {
+         setTimeout( function () { if (load_url) { contents_load(load_url) } }, 1*1000 );
+ 
+--- mobirc/assets/static/mobirc.css
++++ mobirc/assets/static/mobirc.css
+@@ -12,17 +12,17 @@
+     color: #808080;
+ }
+ .join {
+-    color: #ccfece;
++    color: #008000;
+ }
+ .leave {
+-    color: #cccefe;
++    color: #800000;
+ }
+ .ctcp_action {
+     color: #808080;
+     font-style: italic;
+ }
+ .kick {
+-    color: #fc4efe;
++    color: #800000;
+ }
+ .snotice {
+     color: #408080;
+--- mobirc/assets/tmpl/mobile/channel.mt
++++ mobirc/assets/tmpl/mobile/channel.mt
+@@ -4,11 +4,11 @@
+ 
+ ? my $message     = param('msg') || '';
+ ? if ($channel->server) {
+-    <form action='/mobile/channel' method='post'>
++    <form action='/mobile/channel' method='post' autocomplete='off'>
+         <input type="hidden" name="channel" value="<?= $channel->name_urlsafe_encoded?>" />
+         <input type="hidden" name="server" value="<?= $channel->server->id ?>" />
+         <input <? if ($message) { ?>value="<?= $message ?><? } ?>
+-               type="text" name="msg" size="10" />
++               type="text" name="msg" size="32" />
+         <input type="submit" accesskey="1" value="OK" />
+     </form>
+ ? }

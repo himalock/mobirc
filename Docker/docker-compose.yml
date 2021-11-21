@@ -1,0 +1,9 @@
+version: '3'
+services:
+    mobirc:
+        build: .
+        container_name: mobirc-myuser
+        ports:
+            - "16667:16667"
+        volumes:
+            - ./conf:/etc/mobirc
